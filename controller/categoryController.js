@@ -87,7 +87,7 @@ exports.deleteCategory = catchAsync(async (req, res, next) => {
 //////////////////Get All Events//////////////////
 /////////////////////////////////////////////////
 exports.getAllEvents = catchAsync(async (req, res, next) => {
-  const event = await Category.find({ _id: req.params.id }).populate({
+  const event = await Category.findOne({ name: req.params.name }).populate({
     path: "events",
   });
   res.status(200).json({

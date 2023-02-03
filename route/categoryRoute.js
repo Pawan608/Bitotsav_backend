@@ -21,5 +21,5 @@ router
     categoryController.checkAdmin,
     categoryController.deleteCategory
   );
-router.get("/:id/getAllEvents", categoryController.getAllEvents);
+router.get("/:name/getAllEvents", categoryController.getAllEvents);
 module.exports = router;

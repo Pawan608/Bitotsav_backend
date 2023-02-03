@@ -32,9 +32,12 @@ const userSchema = new mongoose.Schema(
         message: "Passwords are not same",
       },
     },
+    bitotsavId: {
+      type: String,
+    },
     role: {
       type: String,
-      enum: ["admin", "user", "participant"],
+      enum: ["admin", "user", "participant", "security"],
       default: "user",
     },
     college: {
@@ -79,6 +82,9 @@ const userSchema = new mongoose.Schema(
       },
     },
     QRcode: {
+      type: String,
+    },
+    rollNum: {
       type: String,
     },
     // team: {

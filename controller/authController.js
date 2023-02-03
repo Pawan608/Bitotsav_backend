@@ -21,7 +21,7 @@ exports.signupVerify = catchAsync(async (req, res, next) => {
   if (currentUser.verified) {
     return next(new AppError("user already exists, Kindly login"), 400);
   }
-  if (req.body.otp === currentUser.otp) {
+  if (req.body.otp == currentUser.otp) {
     console.log(req.body.otp);
     currentUser.verified = true;
     currentUser.otp = undefined;
@@ -63,12 +63,14 @@ exports.checkJWT = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
+  } else {
+    return next(new AppError("Kindly Login", 400));
   }
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
   console.log(decoded.id);
   const currentUser = await User.findById(decoded.id).select("+verified");
   //console.log(currentUser);
-  if (!currentUser) return next(new AppError("Invalid User ", 401));
+  if (!currentUser) return next(new AppError("Kindly Login ", 401));
 
   ///To check if the JWT is issued, after the password is changed.
   if (currentUser.changedPasswordAfter(decoded.iat))

@@ -105,3 +105,55 @@ exports.deleteEvent = catchAsync(async (req, res, next) => {
     event,
   });
 });
+
+/////////////////////////Participants///////////////
+exports.getAllParticipants = catchAsync(async (req, res, next) => {
+  const event = await Event.findById(req.params.id).populate("participants");
+  res.status(200).json({
+    data: event,
+  });
+});
+
+//////////////////////Get event Day Wise///////////////////////////////////
+
+exports.getEventDayWise = catchAsync(async (req, res, next) => {
+  const event = await Event.find({}).select("name place dates");
+  let final_event = [[], [], []];
+  event.forEach((el) => {
+    if (el.dates.day1) final_event[0] = [...final_event[0], el];
+    if (el.dates.day2) final_event[1] = [...final_event[1], el];
+    if (el.dates.day3) final_event[2] = [...final_event[2], el];
+  });
+  res.status(200).json({
+    status: "success",
+    message: "data successfully fetched",
+    events: final_event,
+  });
+});
+
+////////////////Get All Event In group//////////////////
+exports.getEventInGroup = catchAsync(async (req, res, next) => {
+  const event = await Event.aggregate([
+    {
+      $group: {
+        _id: "$category",
+        data: {
+          $push: {
+            _id: "$_id",
+            description: "$description",
+            image: "$image",
+            dates: "$dates",
+            category: "$category",
+            place: "$place",
+            name: "$name",
+          },
+        },
+      },
+    },
+  ]);
+  res.status(200).json({
+    status: "success",
+    message: "Data successfully fetched",
+    events: event,
+  });
+});

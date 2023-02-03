@@ -15,5 +15,10 @@ router.post(
 );
 router.post("/login", authController.protect, userController.login);
 router.post("/getQR", authController.checkJWT, qrcode.generateQR, qrcode.getQR);
-router.post("/verifyEntry/:id", qrcode.verifyEntry);
+router.post("/verifyEntry/:id", authController.checkJWT, qrcode.verifyEntry);
+router.get(
+  "/getuserdetail/:id",
+  authController.checkJWT,
+  userController.getUserDetail
+);
 module.exports = router;

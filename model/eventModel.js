@@ -6,8 +6,8 @@ const eventSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    maxlength: [300, "Description should not be above 300 words"],
-    minlength: [1, "Description should not be below hundered words"],
+    maxlength: [400, "Description should not be above 300 words"],
+    minlength: [50, "Description should not be below hundered words"],
     required: [true, "Description is required"],
   },
   image: {
@@ -69,6 +69,10 @@ const eventSchema = new mongoose.Schema({
   leaderBoard: {
     type: mongoose.Schema.ObjectId,
     ref: "LeaderBoard",
+  },
+  place: {
+    type: String,
+    required: [true, "You must mention the Place"],
   },
 });
 const Event = mongoose.model("Event", eventSchema);

@@ -46,7 +46,20 @@ exports.signupcreate = catchAsync(async (req, res, next) => {
 
   //////////Sending OTP through mail//////////////////////////
   const mail = await new Email(req).sendOTP();
-
+  const userIndex = req.body?.email.lastIndexOf("@");
+  const username = req.body?.email?.slice(0, userIndex);
+  let roll_num;
+  if (req.body?.email?.endsWith("bitmesra.ac.in")) {
+    const re = /[a-z]+/i;
+    const title = re.exec(username);
+    const length = title[0]?.length;
+    let digit;
+    if (length) {
+      digit = username.slice(length).split(".");
+    }
+    roll_num = `${title[0]}/${digit[0]}/${digit[1]}`;
+    console.log("roll num", roll_num);
+  }
   const user = await User.create({
     name: req.body.name,
     email: req.body.email,
@@ -55,6 +68,8 @@ exports.signupcreate = catchAsync(async (req, res, next) => {
     college: req.body.college,
     otp,
     otp_created_at: Date.now(),
+    bitotsavId: `BIT_${username}#2023`,
+    rollNum: roll_num,
   });
   const token = signToken(user._id, "otp");
   res.status(200).json({
@@ -76,11 +91,24 @@ exports.getLoginToken = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
   const token = signToken(req._user._id, "login", res);
-  console.log(req._user._id, req._user);
   return res.status(200).json({
     status: "success",
     message: "Login successfull",
     token,
     user: req._user,
+  });
+});
+
+exports.getUserDetail = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id)
+    .populate({
+      path: "teamId",
+      populate: { path: "members", select: "email name college bitotsavId" },
+    })
+    .select("-entry -transaction");
+  res.status(200).json({
+    status: "success",
+    message: "Data Successfully fetched",
+    user,
   });
 });

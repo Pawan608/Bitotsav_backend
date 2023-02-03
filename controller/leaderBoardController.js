@@ -13,16 +13,15 @@ exports.checkAdmin = catchAsync(async (req, res, next) => {
 
 exports.postScore = catchAsync(async (req, res, next) => {
   eventId = req.params.eventId;
-  const leaderBoard = LeaderBoard.create({
+  const leaderBoard = await LeaderBoard.create({
     event: eventId,
     score: req.body.score,
   });
-  console.log(leaderBoard);
+  //   console.log(leaderBoard);
   const event = await Event.findOneAndUpdate(
     { _id: eventId },
     { leaderBoard: leaderBoard._id }
   );
-  console.log(event);
   if (req.body.score.length != event.participants.length)
     return next(
       new AppError(
@@ -30,7 +29,7 @@ exports.postScore = catchAsync(async (req, res, next) => {
         400
       )
     );
-  return res.status(200).json({
+  res.status(200).json({
     message: "Score successfully updated",
     status: "success",
     data: "leaderBoard",
@@ -66,7 +65,7 @@ exports.getScoreEventWise = catchAsync(async (req, res, next) => {
 });
 
 exports.getScoreTeam = catchAsync(async (req, res, next) => {
-  console.log(req._user.teamId);
+  //   console.log(req._user.teamId);
   const leaderBoard = await LeaderBoard.aggregate()
     .unwind({ path: "$score" })
     .match({ "score.team": req._user.teamId })
@@ -75,6 +74,8 @@ exports.getScoreTeam = catchAsync(async (req, res, next) => {
   //     "score.team": req._user.teamId,
   //   });
   res.status(200).json({
+    status: "success",
+    message: "Data successfully fetched",
     data: leaderBoard,
   });
 });

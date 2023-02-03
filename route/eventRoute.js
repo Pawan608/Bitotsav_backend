@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const authController = require("./../controller/authController");
 const eventController = require("./../controller/eventController");
+router.get("/getSchedule", eventController.getEventDayWise);
+router.get("/getEventInGroup", eventController.getEventInGroup);
 router
   .route("/")
   .post(
@@ -21,4 +23,11 @@ router
     eventController.checkAdmin,
     eventController.deleteEvent
   );
+router.get(
+  "/:id/participants",
+  authController.checkJWT,
+  eventController.checkAdmin,
+  eventController.getAllParticipants
+);
+
 module.exports = router;

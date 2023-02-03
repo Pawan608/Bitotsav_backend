@@ -1,10 +1,10 @@
 const QRcode = require("qrcode");
-const User = require("../model/userModel");
 const AppError = require("./appError");
 const catchAsync = require("./catchAsync");
 const cloudinary = require("./../utils/cloudinary");
 const User = require("./../model/userModel");
 exports.generateQR = catchAsync(async (req, res, next) => {
+  if (req._user.QRcode) next();
   if (!req._user.transaction)
     return next(
       new AppError(
@@ -12,7 +12,6 @@ exports.generateQR = catchAsync(async (req, res, next) => {
         400
       )
     );
-  if (req._user.QRcode) next();
   await QRcode.toFile(
     `public/qrcode/${req._user._id}`,
     `http://localhost:3000/entry/${req._user._id}`
@@ -31,12 +30,18 @@ exports.getQR = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.checkAdmin = catchAsync(async (req, res, next) => {
+  if (!req._user.role == "admin" || !req._user.role == "security")
+    return next(new AppError("You are not allowed to access this route", 400));
+  else next();
+});
+
 exports.verifyEntry = catchAsync(async (req, res, next) => {
   const user = User.findById(req.params.id);
   const date = new Date(Date.now());
-  const day1 = new Date(2023, 2, 9);
-  const day2 = new Date(2023, 2, 10);
-  const day3 = new Date(2023, 2, 11);
+  const day1 = new Date(2023, 2, 10);
+  const day2 = new Date(2023, 2, 11);
+  const day3 = new Date(2023, 2, 12);
   if (date.getMonth() == day1.getMonth() && date.getDate() == day1.getDate())
     if (user.day1) {
       user.entry.day1 = false;

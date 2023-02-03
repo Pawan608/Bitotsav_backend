@@ -35,8 +35,8 @@ exports.registerTeam = catchAsync(async (req, res, next) => {
     var result = emailId.filter((element) => {
       return !includeId.includes(element);
     });
-    return res.status(400).json({
-      status: "fail",
+    return res.status(200).json({
+      status: "error",
       message: "Looks like, few of your members have not yet signed in",
       data: result,
     });

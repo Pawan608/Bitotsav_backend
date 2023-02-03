@@ -37,7 +37,7 @@ leaderBoardSchema.post("aggregate", async function (doc, next) {
   });
 
   const event = await Event.find({ $or: [...eventIds] }).select(
-    "name description image"
+    "name description image place dates"
   );
   doc.forEach((element, index) => {
     element.event = event[index];
