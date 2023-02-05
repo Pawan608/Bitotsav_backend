@@ -35,7 +35,7 @@ exports.uploadcoverImage = uploadImage.fields([{ name: "image", maxCount: 1 }]);
 exports.resizeImage = catchAsync(async (req, res, next) => {
   //   if (!req.files)
   //     return next(new AppError("You must provide at least one image", 400));
-  console.log("File pdf", req.files);
+  //   console.log("File pdf", req.files);
   await Promise.all(
     req.files.image.map(async (file, i) => {
       const filename = `category-${req._id}-${Date.now()}-${i + 1}.jpeg`;

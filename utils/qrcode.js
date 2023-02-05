@@ -43,7 +43,7 @@ exports.verifyEntry = catchAsync(async (req, res, next) => {
   const day2 = new Date(2023, 2, 11);
   const day3 = new Date(2023, 2, 12);
   if (date.getMonth() == day1.getMonth() && date.getDate() == day1.getDate())
-    if (user.day1) {
+    if (user.entry.day1) {
       user.entry.day1 = false;
       user.save({ validateBeforeSave: false });
       return res.status(200).json({
@@ -53,11 +53,11 @@ exports.verifyEntry = catchAsync(async (req, res, next) => {
     } else {
       return res.status(200).json({
         message: "User cannot enter",
-        status: "success",
+        status: "error",
       });
     }
   if (date.getMonth() == day2.getMonth() && date.getDate() == day2.getDate())
-    if (user.day2) {
+    if (user.entry.day2) {
       user.entry.day2 = false;
       user.save({ validateBeforeSave: false });
       return res.status(200).json({
@@ -67,11 +67,11 @@ exports.verifyEntry = catchAsync(async (req, res, next) => {
     } else {
       return res.status(200).json({
         message: "User cannot enter",
-        status: "success",
+        status: "error",
       });
     }
   if (date.getMonth() == day3.getMonth() && date.getDate() == day3.getDate())
-    if (user.day3) {
+    if (user.entry.day3) {
       user.entry.day3 = false;
       user.save({ validateBeforeSave: false });
       return res.status(200).json({
@@ -81,7 +81,7 @@ exports.verifyEntry = catchAsync(async (req, res, next) => {
     } else {
       return res.status(200).json({
         message: "User cannot enter",
-        status: "success",
+        status: "error",
       });
     }
 });

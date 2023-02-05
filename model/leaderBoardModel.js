@@ -30,7 +30,7 @@ leaderBoardSchema.pre("save", async function (next) {
   next();
 });
 leaderBoardSchema.post("aggregate", async function (doc, next) {
-  console.log(doc);
+  //   console.log(doc);
   let eventIds = [];
   doc.forEach((el, index) => {
     eventIds.push({ _id: el.event });

@@ -12,12 +12,23 @@ const categoriesRouter = require("./route/categoryRoute.js");
 const eventRouter = require("./route/eventRoute");
 const teamRouter = require("./route/teamRoute");
 const leaderBoardRouter = require("./route/leaderBoardRoute");
+const rateLimit = require("express-rate-limit");
 const app = express();
 const cors = require("cors");
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://bitotsav.in",
+    // origin: "http://localhost:3000",
+  })
+);
 app.use(helmet());
 app.use(mongoSanitize());
 app.use(xss());
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 1 * 60 * 1000,
+  message: "Too many requests from this IP, please try again in an hour!",
+});
 app.use(express.json());
 app.use(express.static("public"));
 

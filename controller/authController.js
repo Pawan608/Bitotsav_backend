@@ -9,7 +9,7 @@ const AppError = require("../utils/appError");
 /////////////////////////////////////////////////////////////////////////
 exports.signupVerify = catchAsync(async (req, res, next) => {
   const token = req.params.token;
-  console.log(token);
+  // console.log(token);
   const decoded = await promisify(jwt.verify)(
     token,
     process.env.JWT_SECRET_OTP
@@ -22,7 +22,7 @@ exports.signupVerify = catchAsync(async (req, res, next) => {
     return next(new AppError("user already exists, Kindly login"), 400);
   }
   if (req.body.otp == currentUser.otp) {
-    console.log(req.body.otp);
+    // console.log(req.body.otp);
     currentUser.verified = true;
     currentUser.otp = undefined;
     currentUser.save({ validateBeforeSave: false });
@@ -66,8 +66,12 @@ exports.checkJWT = catchAsync(async (req, res, next) => {
   } else {
     return next(new AppError("Kindly Login", 400));
   }
+  // console.log("tooken", token);
+  if (token == "undefined") {
+    return next(new AppError("Kindly Login", 400));
+  }
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded.id);
+  // console.log(decoded.id);
   const currentUser = await User.findById(decoded.id).select("+verified");
   //console.log(currentUser);
   if (!currentUser) return next(new AppError("Kindly Login ", 401));

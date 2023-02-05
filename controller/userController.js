@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
-const Email = require("./../utils/email");
-
+const Emails = require("./../utils/email");
+const EmailId = require("./../model/emailModel");
 ///////////////////Token Creation///////////////////////////
 const signToken = (id, purpose, res) => {
   if (purpose == "otp")
@@ -45,7 +45,16 @@ exports.signupcreate = catchAsync(async (req, res, next) => {
   //////////////////////////////////////////////////////////////////
 
   //////////Sending OTP through mail//////////////////////////
-  const mail = await new Email(req).sendOTP();
+
+  const email1 = await EmailId.findOneAndUpdate(
+    { limit: { $gt: 0 } },
+    { $inc: { limit: -1 } }
+  );
+  //   console.log(email1);
+  if (email1 == null) {
+    return next(new AppError("Registration closed for the day", 400));
+  }
+  const mail = await new Emails(req, email1.email, email1.password).sendOTP();
   const userIndex = req.body?.email.lastIndexOf("@");
   const username = req.body?.email?.slice(0, userIndex);
   let roll_num;
@@ -53,12 +62,19 @@ exports.signupcreate = catchAsync(async (req, res, next) => {
     const re = /[a-z]+/i;
     const title = re.exec(username);
     const length = title[0]?.length;
+    let finalTitle = "";
     let digit;
     if (length) {
       digit = username.slice(length).split(".");
+      if (title[0].toUpperCase() == "BTECH") {
+        finalTitle = "B.TECH";
+      } else {
+        finalTitle = title[0];
+      }
     }
-    roll_num = `${title[0]}/${digit[0]}/${digit[1]}`;
-    console.log("roll num", roll_num);
+    roll_num = `${finalTitle}/${digit[0]}/${digit[1]}`;
+    req.body.transaction_status = "locked";
+    // console.log("roll num", roll_num);
   }
   const user = await User.create({
     name: req.body.name,
@@ -70,6 +86,7 @@ exports.signupcreate = catchAsync(async (req, res, next) => {
     otp_created_at: Date.now(),
     bitotsavId: `BIT_${username}#2023`,
     rollNum: roll_num,
+    transaction_status: req.body.transaction_status,
   });
   const token = signToken(user._id, "otp");
   res.status(200).json({

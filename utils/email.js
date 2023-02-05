@@ -2,11 +2,13 @@ const nodemailer = require("nodemailer");
 //const htmlToText = require("html-to-text");
 // 1) Create a transporter
 module.exports = class Email {
-  constructor(req) {
+  constructor(req, emailId, password) {
     this.firstname = req.body.name.split(" ")[0];
     this.to = req.body.email;
-    this.from = process.env.EMAIL_SEND_MAIL_PASSWORD;
+    this.from = password;
     this.otp = req.body.otp;
+    this.password = password;
+    this.emailId = emailId;
   }
   newTransport() {
     return nodemailer.createTransport({
@@ -16,20 +18,20 @@ module.exports = class Email {
       host: "smtp.gmail.com",
       secure: "true",
       auth: {
-        user: process.env.TEST_EMAIL,
-        pass: process.env.EMAIL_SEND_MAIL_PASSWORD,
+        user: this.emailId,
+        pass: this.password,
       },
     });
   }
 
-  async send(subject, text) {
+  async send(subject, template) {
     //console.log(html);
     // 2) Define email options
     const mailOptions = {
       from: this.from,
       to: this.to,
       subject,
-      text: text,
+      html: template,
       //text: htmlToText.fromString(html),
     };
 

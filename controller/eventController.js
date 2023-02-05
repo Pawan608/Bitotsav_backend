@@ -36,7 +36,7 @@ exports.uploadcoverImage = uploadImage.fields([{ name: "image", maxCount: 1 }]);
 exports.resizeImage = catchAsync(async (req, res, next) => {
   //   if (!req.files)
   //     return next(new AppError("You must provide at least one image", 400));
-  console.log("File pdf", req.files);
+  //   console.log("File pdf", req.files);
   await Promise.all(
     req.files.image.map(async (file, i) => {
       const filename = `event-${req._id}-${Date.now()}-${i + 1}.jpeg`;
@@ -53,9 +53,9 @@ exports.resizeImage = catchAsync(async (req, res, next) => {
   next();
 });
 exports.creatEvent = catchAsync(async (req, res, next) => {
-  console.log("category Name", req.body.category);
+  //   console.log("category Name", req.body);
   const category = await Category.findOne({ name: req.body.category });
-  console.log(category);
+  //   console.log(category);
   if (!category) {
     return next(
       new AppError("Category not found, Please try with different name", 400)
@@ -71,6 +71,7 @@ exports.creatEvent = catchAsync(async (req, res, next) => {
       day3: req.body.date3,
     },
     category: req.body.category,
+    place: req.body.place,
   });
   category.events.push(event._id);
   category.save({ validateBeforeSave: false });
@@ -94,7 +95,7 @@ exports.getEvent = catchAsync(async (req, res, next) => {
 ///////////////Delete Category///////////////////
 exports.deleteEvent = catchAsync(async (req, res, next) => {
   const event = await Event.findByIdAndDelete(req.params.id);
-  console.log(event._id);
+  //   console.log(event._id);
   await Category.updateOne(
     { name: event.category },
     { $pull: { events: { $eq: event._id } } }

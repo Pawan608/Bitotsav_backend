@@ -87,6 +87,11 @@ const userSchema = new mongoose.Schema(
     rollNum: {
       type: String,
     },
+    transaction_status: {
+      type: "String",
+      enum: ["locked", "done", "notdone"],
+      default: "notdone",
+    },
     // team: {
     //   type: mongoose.Schema.ObjectId,
     //   ref: "Team",
@@ -98,7 +103,7 @@ const userSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
-
+userSchema.index({ email: 1 });
 // userSchema.virtual("team", {
 //   ref: "Post",
 //   foreignField: "user",

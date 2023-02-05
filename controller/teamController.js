@@ -22,7 +22,7 @@ exports.registerTeam = catchAsync(async (req, res, next) => {
 
   let includeId = [];
   let userId = [];
-  console.log(req._user._id);
+  //   console.log(req._user._id);
   user.forEach((element) => {
     userId.push(element._id);
     includeId.push(element.email);
@@ -87,10 +87,10 @@ exports.participateInEvent = catchAsync(async (req, res, next) => {
     return next(new appError("Team not found", 400));
   }
   const members = team.members;
-  console.log(members);
+  //   console.log(members);
   if (!members.includes(req._user._id))
     return next(new appError("You are not a part of this team", 400));
-  console.log(team);
+  //   console.log(team);
   if (team.eventsParticipatedIn.includes(req.params.eventId))
     return next(new appError("You have already registered in this event", 400));
 
@@ -99,7 +99,7 @@ exports.participateInEvent = catchAsync(async (req, res, next) => {
     { _id: req.params.eventId },
     { $push: { participants: team._id } }
   );
-  console.log("eventsssss", event);
+  //   console.log("eventsssss", event);
   await team.save({ validateBeforeSave: false });
   res.status(200).json({
     message: "Successfully registered",
