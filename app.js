@@ -17,7 +17,7 @@ const app = express();
 const cors = require("cors");
 app.use(
   cors({
-    origin: "https://bitotsav.in",
+    origin: "https://www.bitotsav.in",
     // origin: "http://localhost:3000",
   })
 );
