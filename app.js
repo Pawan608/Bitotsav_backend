@@ -17,8 +17,8 @@ const app = express();
 const cors = require("cors");
 app.use(
   cors({
-    // origin: "https://www.bitotsav.in",
-    origin: "http://localhost:3001",
+    origin: "https://www.bitotsav.in",
+    // origin: "http://localhost:3001",
   })
 );
 app.use(helmet());
