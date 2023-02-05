@@ -69,7 +69,7 @@ exports.signupcreate = catchAsync(async (req, res, next) => {
       if (title[0].toUpperCase() == "BTECH") {
         finalTitle = "B.TECH";
       } else {
-        finalTitle = title[0];
+        finalTitle = title[0].toUpperCase();
       }
     }
     roll_num = `${finalTitle}/${digit[0]}/${digit[1]}`;
