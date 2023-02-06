@@ -17,7 +17,11 @@ const app = express();
 const cors = require("cors");
 app.use(
   cors({
-    origin: "https://www.bitotsav.in",
+    origin: [
+      "https://www.bitotsav.in",
+      "https://vercel.com/analytics",
+      // "http://localhost:3000",
+    ],
     // origin: "http://localhost:3001",
   })
 );
