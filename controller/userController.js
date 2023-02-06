@@ -68,7 +68,8 @@ exports.signupcreate = catchAsync(async (req, res, next) => {
       digit = username.slice(length).split(".");
       if (title[0].toUpperCase() == "BTECH") {
         finalTitle = "B.TECH";
-      } else {
+      }
+      if (title[0].toUpperCase() != "BTECH") {
         finalTitle = title[0].toUpperCase();
       }
     }
