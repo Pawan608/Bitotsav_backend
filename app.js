@@ -20,7 +20,7 @@ app.use(
     origin: [
       "https://www.bitotsav.in",
       "https://vercel.com/analytics",
-      // "http://localhost:3000",
+      "http://localhost:3001",
     ],
     // origin: "http://localhost:3001",
   })
