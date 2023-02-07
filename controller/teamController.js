@@ -19,7 +19,6 @@ exports.registerTeam = catchAsync(async (req, res, next) => {
     ],
     verified: true,
   });
-
   ///////////////////////////////////////////////////////////////////////
   ////////////To check valid users///////////////////////////////////////
 
@@ -30,6 +29,7 @@ exports.registerTeam = catchAsync(async (req, res, next) => {
     userId.push(element._id);
     includeId.push(element.email);
   });
+  // console.log(userId);
   //   console.log("user", userId, userId.includes(req._user._id));
   //   if (!userId.includes(req._user._id)) {
   //     return next(new appError("Only a member of the team can register", 400));
@@ -44,7 +44,9 @@ exports.registerTeam = catchAsync(async (req, res, next) => {
       data: result,
     });
   }
-
+  // console.log("heey", emailId[0]);
+  const leader = await User.find({ email: { $eq: emailId[0] } });
+  // console.log(leader);
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////To check if the user belong to any other team//////////////////
 
@@ -56,7 +58,7 @@ exports.registerTeam = catchAsync(async (req, res, next) => {
 
   const team = await Team.create({
     name: req.body.name,
-    teamLeader: userId[0],
+    teamLeader: leader[0]._id,
     members: userId,
   });
   await User.updateMany(
@@ -75,6 +77,7 @@ exports.registerTeam = catchAsync(async (req, res, next) => {
     },
     { role: "participant", teamId: team._id }
   );
+
   res.status(200).json({
     message:
       "Team successfully registered,All your team memebers are registered as Participant",
