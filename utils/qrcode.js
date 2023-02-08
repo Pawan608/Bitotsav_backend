@@ -14,7 +14,7 @@ exports.generateQR = catchAsync(async (req, res, next) => {
     );
   await QRcode.toFile(
     `public/qrcode/${req._user._id}`,
-    `https://wwww.bitotsav.in/entry/${req._user._id}`
+    `https://www.bitotsav.in//entry/${req._user._id}`
   );
   const result = await cloudinary.uploader.upload(
     `public/qrcode/${req._user._id}`

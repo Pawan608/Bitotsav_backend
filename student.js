@@ -41049,6 +41049,7 @@ const updateMessData = async () => {
     {
       transaction: true,
       entry: { day1: true, day2: true, day3: true },
+      transaction_status: "done",
     }
   );
 
