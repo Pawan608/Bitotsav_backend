@@ -4,7 +4,7 @@ const catchAsync = require("./catchAsync");
 const cloudinary = require("./../utils/cloudinary");
 const User = require("./../model/userModel");
 exports.generateQR = catchAsync(async (req, res, next) => {
-  if (req._user.QRcode) next();
+  if (req._user.QRcode) return next();
   if (!req._user.transaction)
     return next(
       new AppError(
@@ -14,7 +14,7 @@ exports.generateQR = catchAsync(async (req, res, next) => {
     );
   await QRcode.toFile(
     `public/qrcode/${req._user._id}`,
-    `http://localhost:3000/entry/${req._user._id}`
+    `https://wwww.bitotsav.in/entry/${req._user._id}`
   );
   const result = await cloudinary.uploader.upload(
     `public/qrcode/${req._user._id}`
@@ -25,7 +25,8 @@ exports.generateQR = catchAsync(async (req, res, next) => {
 });
 
 exports.getQR = catchAsync(async (req, res, next) => {
-  res.status(200).json({
+  return res.status(200).json({
+    status: "success",
     url: req._user.QRcode,
   });
 });
