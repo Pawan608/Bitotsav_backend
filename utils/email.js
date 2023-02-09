@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 // 1) Create a transporter
 module.exports = class Email {
   constructor(req, emailId, password) {
-    this.firstname = req.body.name.split(" ")[0];
+    this.firstname = req.body?.name?.split(" ")[0];
     this.to = req.body.email;
     this.from = password;
     this.otp = req.body.otp;
@@ -41,7 +41,9 @@ module.exports = class Email {
   async sendOTP() {
     await this.send(
       `OTP to verify your account`,
-      `Hello ${this.firstname}, Your otp to login to Bitotsav is:${this.otp}
+      `Hello ${this.firstname || "User"}, Your otp to login to Bitotsav is:${
+        this.otp
+      }
       'This otp is valid only for 10 minutes.'
 
       'Thanks,'

@@ -115,6 +115,22 @@ exports.getAllParticipants = catchAsync(async (req, res, next) => {
   });
 });
 
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////Get Leadername//////////////////////////////////
+exports.getAllLeaders = catchAsync(async (req, res, next) => {
+  const event = await Event.findById(req.params.id).populate({
+    path: "participants",
+    select: "teamLeader name",
+    populate: {
+      path: "teamLeader",
+      select: "email name",
+    },
+  });
+  res.status(200).json({
+    data: event,
+  });
+});
+
 //////////////////////Get event Day Wise///////////////////////////////////
 
 exports.getEventDayWise = catchAsync(async (req, res, next) => {

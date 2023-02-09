@@ -130,3 +130,53 @@ exports.getUserDetail = catchAsync(async (req, res, next) => {
     user,
   });
 });
+
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  console.log("emqail hai", req.body);
+  const email = req.body.email;
+  const user = await User.findOne({ email }).select("+verified");
+  console.log(user);
+  if (!user || !user.verified) {
+    return next(new AppError("No such user exists", 400));
+  }
+  const otp =
+    (Math.floor(Math.random() * (9 - 1 + 1)) + 1) * 1 +
+    (Math.floor(Math.random() * (9 - 1 + 1)) + 1) * 10 +
+    (Math.floor(Math.random() * (9 - 1 + 1)) + 1) * 100 +
+    (Math.floor(Math.random() * (9 - 1 + 1)) + 1) * 1000;
+  req.body.otp = otp;
+  user.otp = otp;
+  await user.save({ validateBeforeSave: false });
+  const email1 = await EmailId.findOneAndUpdate(
+    { limit: { $gt: 0 } },
+    { $inc: { limit: -1 } }
+  );
+  //   console.log(email1);
+  if (email1 == null) {
+    return next(new AppError("Registration closed for the day", 400));
+  }
+  const mail = await new Emails(req, email1.email, email1.password).sendOTP();
+  const token = signToken(user._id, "otp");
+  res.status(200).json({
+    status: "success",
+    token,
+  });
+});
+
+exports.PasswordresetOTPVerify = catchAsync(async (req, res, next) => {
+  const token = req.params.token;
+  const decoded = await promisify(jwt.verify)(
+    token,
+    process.env.JWT_SECRET_OTP
+  );
+  const currentUser = await User.findById(decoded.id);
+  if (req.body.otp == currentUser.otp) {
+    currentUser.password = req.body.password;
+    currentUser.confirmpassword = req.body.confirmpassword;
+    await currentUser.save();
+    res.status(200).json({
+      status: "success",
+      message: "Password successfully Changed, kindly login",
+    });
+  } else return next(new AppError("otp didn not match", 400));
+});

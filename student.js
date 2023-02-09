@@ -41035,15 +41035,40 @@ const messData = [
 // };
 const updateMessData = async () => {
   let count = 0;
-  const rollList = [];
-  messData.forEach(async (el) => {
+  let rollList = [];
+  let rollListRestSmall = [];
+  let rollListRestCapital = [];
+  let rollListPhd = [];
+  messData.forEach((el) => {
     const title = el.rollNo.split("/");
 
     if (title[0] == "B.TECH") {
       rollList.push({ rollNum: el.rollNo });
-      console.log(rollList);
+      // console.log(rollList);
+    }
+    if (title[0] != "B.TECH") {
+      // console.log(`${title[0].toLocaleLowerCase()}/${title[1]}/${title[2]}`);
+      rollListRestSmall.push({
+        rollNum: `${title[0].toLowerCase()}/${title[1]}/${title[2]}`,
+      });
+      rollListRestCapital.push({ rollNum: el.rollNo });
+    }
+    if (title.length == 4) {
+      // console.log(title[0].toLowerCase());
+      rollListPhd.push({
+        email:
+          title[0].toLowerCase() +
+          title[1].toLowerCase() +
+          title[2] +
+          "." +
+          title[3] +
+          "@bitmesra.ac.in",
+      });
     }
   });
+  console.log(rollListRestSmall);
+  console.log(rollListPhd);
+  console.log(rollListRestSmall);
   const user = await User.updateMany(
     { $or: rollList },
     {
@@ -41052,8 +41077,54 @@ const updateMessData = async () => {
       transaction_status: "done",
     }
   );
-
-  console.log(++count, user);
+  console.log("B.tech done", user);
+  const user1 = await User.updateMany(
+    { $or: rollListRestSmall },
+    {
+      transaction: true,
+      entry: { day1: true, day2: true, day3: true },
+      transaction_status: "done",
+    }
+  );
+  console.log("barch done", user1);
+  const user2 = await User.updateMany(
+    { $or: rollListRestCapital },
+    {
+      transaction: true,
+      entry: { day1: true, day2: true, day3: true },
+      transaction_status: "done",
+    }
+  );
+  const userPHD = await User.updateMany(
+    { $or: rollListPhd },
+    {
+      transaction: true,
+      entry: { day1: true, day2: true, day3: true },
+      transaction_status: "done",
+    }
+  );
+  console.log("user PHD MASTER DONE", userPHD);
+  console.log("barch done capital done", user2);
+  const user3 = await User.updateMany(
+    { transaction_status: "locked" },
+    {
+      transaction_status: "notdone",
+    }
+  );
+  console.log(user3);
 };
 updateMessData();
 // updateData();
+// const lowerString = title[0][0] + title[0].toLocaleLowerCase().slice(1);
+// rollAjib.push({ rollNum: `${lowerString}/${title[1]}/${title[2]}` });
+
+// const user4 = await User.updateMany(
+//   { $or: rollAjib },
+//   {
+//     transaction: true,
+//     entry: { day1: true, day2: true, day3: true },
+//     transaction_status: "done",
+//   }
+// );
+// console.log("ajib wal", user4);
+console.log("MT/BT/10005/22".split("/").length);

@@ -21,4 +21,9 @@ router.get(
   authController.checkJWT,
   userController.getUserDetail
 );
+router.post("/resetPassword", userController.resetPassword);
+router.post(
+  "/passwordresetOTPVerify/:token",
+  userController.PasswordresetOTPVerify
+);
 module.exports = router;

@@ -23,10 +23,11 @@ router
     eventController.checkAdmin,
     eventController.deleteEvent
   );
+router.route("/:id/getLeaderDetail").get(eventController.getAllLeaders);
 router.get(
   "/:id/participants",
-  authController.checkJWT,
-  eventController.checkAdmin,
+  // authController.checkJWT,
+  // eventController.checkAdmin,
   eventController.getAllParticipants
 );
 
