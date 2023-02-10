@@ -39,7 +39,7 @@ exports.checkAdmin = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyEntry = catchAsync(async (req, res, next) => {
-  const user = User.findById(req.params.id);
+  const user = await User.findById(req.params.id);
   const date = new Date(Date.now());
   const day1 = new Date(2023, 2, 10);
   const day2 = new Date(2023, 2, 11);
