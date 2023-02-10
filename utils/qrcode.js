@@ -32,7 +32,8 @@ exports.getQR = catchAsync(async (req, res, next) => {
 });
 
 exports.checkAdmin = catchAsync(async (req, res, next) => {
-  if (!req._user.role == "admin" || !req._user.role == "security")
+  console.log("users", req._user);
+  if (req._user.role == "user")
     return next(new AppError("You are not allowed to access this route", 400));
   else next();
 });
