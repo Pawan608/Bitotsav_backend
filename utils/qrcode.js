@@ -86,4 +86,8 @@ exports.verifyEntry = catchAsync(async (req, res, next) => {
         status: "error",
       });
     }
+  return res.status(400).json({
+    message: "No such record found",
+    status: "error",
+  });
 });
