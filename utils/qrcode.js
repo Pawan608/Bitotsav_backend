@@ -41,9 +41,9 @@ exports.checkAdmin = catchAsync(async (req, res, next) => {
 exports.verifyEntry = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.params.id);
   const date = new Date(Date.now());
-  const day1 = new Date(2023, 2, 10);
-  const day2 = new Date(2023, 2, 11);
-  const day3 = new Date(2023, 2, 12);
+  const day1 = new Date(2023, 1, 10);
+  const day2 = new Date(2023, 1, 11);
+  const day3 = new Date(2023, 1, 12);
   if (date.getMonth() == day1.getMonth() && date.getDate() == day1.getDate())
     if (user.entry.day1) {
       user.entry.day1 = false;
