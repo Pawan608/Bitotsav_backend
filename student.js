@@ -41043,14 +41043,32 @@ const updateMessData = async () => {
     const title = el.rollNo.split("/");
 
     if (title[0] == "B.TECH") {
-      rollList.push({ rollNum: el.rollNo });
+      // rollList.push({ rollNum: el.rollNo });
       // console.log(rollList);
     }
+
+    ////////k22 QUERY RESOLVE/////////////////
+    // if (title[0] == "B.TECH") {
+    //   (email = "btech" + title[1] + "22" + "." + title[2] + "@bitmesra.ac.in"),
+    //     rollList.push({ email });
+    //   // console.log(rollList);
+    // }
+    /////////////////////////////////////////////////////
     if (title[0] != "B.TECH") {
       // console.log(`${title[0].toLocaleLowerCase()}/${title[1]}/${title[2]}`);
       rollListRestSmall.push({
         rollNum: `${title[0].toLowerCase()}/${title[1]}/${title[2]}`,
       });
+      rollListRestCapital.push({ rollNum: el.rollNo });
+
+      /////////////Ajib wala format query
+      // rollListRestSmall.push({
+      //   email: `${title[0].toLowerCase()}${title[1]}18.${
+      //     title[2]
+      //   }@bitmesra.ac.in`,
+      // });
+      /////////////////////////////////////////////
+
       rollListRestCapital.push({ rollNum: el.rollNo });
     }
     if (title.length == 4) {
@@ -41066,9 +41084,10 @@ const updateMessData = async () => {
       });
     }
   });
-  console.log(rollListRestSmall);
-  console.log(rollListPhd);
-  console.log(rollListRestSmall);
+  // console.log(rollListRestSmall);
+  // console.log(rollListPhd);
+  // console.log(rollListRestSmall);
+  // console.log(rollList);
   const user = await User.updateMany(
     { $or: rollList },
     {

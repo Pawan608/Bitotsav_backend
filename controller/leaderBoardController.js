@@ -42,7 +42,7 @@ exports.totalScore = catchAsync(async (req, res, next) => {
     {
       $group: {
         _id: "$score.team",
-        totalScore: { $sum: "$score.point" },
+        point: { $sum: "$score.point" },
         teamName: { $first: "$score.teamName" },
       },
     },

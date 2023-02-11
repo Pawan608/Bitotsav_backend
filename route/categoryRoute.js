@@ -22,4 +22,5 @@ router
     categoryController.deleteCategory
   );
 router.get("/:name/getAllEvents", categoryController.getAllEvents);
+
 module.exports = router;

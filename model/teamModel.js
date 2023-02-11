@@ -26,6 +26,9 @@ const teamSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  teamIndentity: {
+    type: String,
+  },
 });
 const Team = mongoose.model("Team", teamSchema);
 module.exports = Team;

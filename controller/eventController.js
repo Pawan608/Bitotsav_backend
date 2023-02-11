@@ -174,3 +174,25 @@ exports.getEventInGroup = catchAsync(async (req, res, next) => {
     events: event,
   });
 });
+
+////////////////////////////////////////////////////////
+///////////Get Event List/////////////////////////
+exports.getEventlist = catchAsync(async (req, res, next) => {
+  const event = await Event.aggregate([
+    {
+      $group: {
+        _id: "$category",
+        list: {
+          $push: {
+            _id: "$_id",
+            name: "$name",
+          },
+        },
+      },
+    },
+    { $sort: { _id: -1 } },
+  ]);
+  res.status(200).json({
+    list: event,
+  });
+});

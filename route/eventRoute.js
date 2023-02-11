@@ -3,7 +3,9 @@ const router = express.Router();
 const authController = require("./../controller/authController");
 const eventController = require("./../controller/eventController");
 router.get("/getSchedule", eventController.getEventDayWise);
+
 router.get("/getEventInGroup", eventController.getEventInGroup);
+router.get("/getEventlist", eventController.getEventlist);
 router
   .route("/")
   .post(
