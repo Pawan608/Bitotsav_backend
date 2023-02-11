@@ -46,7 +46,7 @@ exports.totalScore = catchAsync(async (req, res, next) => {
         teamName: { $first: "$score.teamName" },
       },
     },
-    { $sort: { totalScore: -1 } },
+    { $sort: { point: -1 } },
   ]);
   res.status(200).json({
     data: leaderBoard,

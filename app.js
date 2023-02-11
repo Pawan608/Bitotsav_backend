@@ -35,7 +35,6 @@ const limiter = rateLimit({
 });
 app.use(express.json());
 app.use(express.static("public"));
-
 app.use(cookieParser());
 // route imports
 app.use("/api/v1/users", userRouter);
