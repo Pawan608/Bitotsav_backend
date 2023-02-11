@@ -29,6 +29,9 @@ leaderBoardSchema.pre("save", async function (next) {
   const event = this.populate({ path: "event" });
   next();
 });
+// leaderBoardSchema.pre("aggregate", async function (next) {
+//   this.populate("event");
+// });
 leaderBoardSchema.post("aggregate", async function (doc, next) {
   //   console.log(doc);
   let eventIds = [];
@@ -36,9 +39,10 @@ leaderBoardSchema.post("aggregate", async function (doc, next) {
     eventIds.push({ _id: el.event });
   });
 
-  const event = await Event.find({ $or: [...eventIds] }).select(
-    "name description image place dates"
-  );
+  const event = await Event.find({ $or: [...eventIds] })
+    .select("name description image place dates")
+    .sort({ event: -1 });
+  doc.sort((a, b) => (a.event < b.event ? -1 : 1));
   doc.forEach((element, index) => {
     element.event = event[index];
   });

@@ -41043,8 +41043,8 @@ const updateMessData = async () => {
     const title = el.rollNo.split("/");
 
     if (title[0] == "B.TECH") {
-      // rollList.push({ rollNum: el.rollNo });
-      // console.log(rollList);
+      rollList.push({ rollNum: el.rollNo });
+      console.log(rollList);
     }
 
     ////////k22 QUERY RESOLVE/////////////////
